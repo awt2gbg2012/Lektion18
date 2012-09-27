@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "About Us";
+}
+
+<h2>About</h2>
+<p>
+    <a href="" id="getComments">Get Comments</a>
+</p>
+<div id="getCommentsResult">
+</div>
+<p>
+    <a href="" id="postComments">Post Comments</a>
+</p>
+<div id="postCommentsResult">
+</div>
+<p>
+    <a href="" id="postComment">Post Comment</a>
+</p>
+<div id="postCommentResult">
+</div>
+<p>
+    <a href="" id="putComment">Put Comment</a>
+</p>
+<div id="putCommentResult">
+</div>
+<p>
+    <a href="" id="getComment">Get Comment</a>
+</p>
+<div id="getCommentResult">
+</div>
+<p>
+    <a href="" id="deleteComment">Delete Comment</a>
+</p>
+<div id ="deleteCommentResult">
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#getComments').click(function () {
+                var url = "@Url.Content("~/API/Comments")";
+                var result = "";
+                $.getJSON(url, function(data) {
+                    $.each(data, function(i, comment) {
+                        result += comment.Subject + "</br>";
+                    });
+                    $('#getCommentsResult').html(result);
+                });
+                return false;
+            });
+
+            $('#postComments').click(function () {
+                var newComments = {"items": [{"Subject": "A New Subject","Body": "The Body","AuthorName": "Mike Jones"}, {"Subject": "A Second New Subject","Body": "The Other Body","AuthorName": "James Jones"}]};
+                var url = "@Url.Content("~/API/Comments")";
+                var result = "";
+                $.ajax({
+                    url: url, 
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType:  "application/json; charset=utf-8",
+                    data: JSON.stringify(newComments), 
+                    success: function(data) {
+                        $.each(data, function(i) {
+                            result += data[i] + "</br>";
+                        });
+                        $('#postCommentsResult').html(result);
+                    }
+                });
+                return false;
+            });
+
+            $('#postComment').click(function () {
+                var newComment = {"Subject": "A New Subject","Body": "The Body","AuthorName": "Mike Jones"};
+                var url = "@Url.Content("~/API/Comments/Comment")";
+                $.post(url, newComment, function(data) {
+                    $('#postCommentResult').html(data.Subject);
+                }, 'json');
+                return false;
+            });
+
+            $('#putComment').click(function () {
+                var newComment = {"Subject": "A New Subject","Body": "The Body","AuthorName": "Mike Jones"};
+                var url = "@Url.Content("~/API/Comments/Comment")";
+                $.ajax({
+                    url: url, 
+                    type: 'PUT',
+                    dataType: 'json',
+                    data: newComment, 
+                    success: function(data) {
+                        $('#putCommentResult').html(data.Subject);
+                    }
+                });
+                return false;
+            });
+
+            $('#getComment').click(function () {
+                var url = "@Url.Content("~/API/Comments/Comment/1")";
+                $.getJSON(url, function(data) {
+                    $('#getCommentResult').html(data.Subject);
+                });
+                return false;
+            });
+
+            $('#deleteComment').click(function () {
+                var url = "@Url.Content("~/API/Comments/Comment/1")";
+                $.ajax({
+                    url: url, 
+                    type: 'DELETE',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#deleteCommentResult').html(data.toString());
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}
