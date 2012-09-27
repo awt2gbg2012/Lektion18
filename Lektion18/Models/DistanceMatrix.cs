@@ -219,5 +219,30 @@ namespace WebMatrixTest.Models
 
             return routes;
         }
+
+        public static string CreateDistanceMatrixURI(string origin,
+                                                        List<string> destinations)
+        {
+            return DistanceMatrixURL + DistanceMatrix.CreateDistanceMatrixURN(origin,
+                                                                destinations);
+        }
+
+        private static string DistanceMatrixURL =
+            @"http://maps.googleapis.com/maps/api/distancematrix/";
+
+        private static string CreateDistanceMatrixURN(string origin,
+                                                List<string> destinations)
+        {
+            string destinationString = "";
+            foreach (var destination in destinations)
+            {
+                if ("" != destinationString)
+                    destinationString += "|";
+                destinationString += destination;
+            }
+            return string.Format("json?origins={0}&destinations={1}&language=sv-SE&sensor=false",
+                                    origin,
+                                    destinationString);
+        }
     }
 }
