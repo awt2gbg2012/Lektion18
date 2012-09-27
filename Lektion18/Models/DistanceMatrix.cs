@@ -173,5 +173,36 @@ namespace WebMatrixTest.Models
 
             return routes;
         }
+
+        public static List<string> DeserializeRoutes(string json)
+        {
+            DistanceMatrixData distanceMatrixData = new JavaScriptSerializer()
+                                                    .Deserialize<DistanceMatrixData>(json);
+
+            List<string> routes = new List<string>();
+            string origin;
+            for (int originIndex = 0;
+                originIndex < distanceMatrixData.origin_addresses.Count;
+                originIndex++)
+            {
+                origin = distanceMatrixData.origin_addresses[originIndex];
+                for (int destinationIndex = 0;
+                    destinationIndex < distanceMatrixData.destination_addresses.Count;
+                    destinationIndex++)
+                {
+                    routes.Add(string.Format("From: {0} To: {1} Distance: {2}"
+                       , origin
+                       , distanceMatrixData.destination_addresses[destinationIndex]
+                       , distanceMatrixData
+                            .rows[originIndex]
+                            .elements[destinationIndex]
+                            .distance
+                            .text
+                    ));
+                }
+            }
+
+            return routes;
+        }
     }
 }
