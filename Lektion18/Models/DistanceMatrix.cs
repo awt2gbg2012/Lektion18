@@ -92,6 +92,21 @@ namespace WebMatrixTest.Models
         public string text { get; set; }
     }
 
+    public class DistanceMatrixRoute
+    {
+        public string Origin { get; set; }
+        public string Destination { get; set; }
+        public string Distance { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("From: {0} To: {1} Distance: {2}",
+                                            Origin,
+                                            Destination,
+                                            Distance);
+        }
+    }
+
     public class DistanceMatrix
     {
         public static List<string> DeserializeRoutesTest()
@@ -174,12 +189,12 @@ namespace WebMatrixTest.Models
             return routes;
         }
 
-        public static List<string> DeserializeRoutes(string json)
+        public static List<DistanceMatrixRoute> DeserializeRoutes(string json)
         {
             DistanceMatrixData distanceMatrixData = new JavaScriptSerializer()
                                                     .Deserialize<DistanceMatrixData>(json);
 
-            List<string> routes = new List<string>();
+            List<DistanceMatrixRoute> routes = new List<DistanceMatrixRoute>();
             string origin;
             for (int originIndex = 0;
                 originIndex < distanceMatrixData.origin_addresses.Count;
@@ -190,15 +205,15 @@ namespace WebMatrixTest.Models
                     destinationIndex < distanceMatrixData.destination_addresses.Count;
                     destinationIndex++)
                 {
-                    routes.Add(string.Format("From: {0} To: {1} Distance: {2}"
-                       , origin
-                       , distanceMatrixData.destination_addresses[destinationIndex]
-                       , distanceMatrixData
+                    routes.Add(new DistanceMatrixRoute {
+                       Origin = origin,
+                       Destination = distanceMatrixData.destination_addresses[destinationIndex],
+                       Distance = distanceMatrixData
                             .rows[originIndex]
                             .elements[destinationIndex]
                             .distance
                             .text
-                    ));
+                    });
                 }
             }
 
