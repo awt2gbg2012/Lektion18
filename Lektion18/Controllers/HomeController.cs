@@ -12,8 +12,15 @@ namespace Lektion18.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = "Welcome to ASP.NET MVC!";
+            string origin = "skövde";
+            List<string> destinations = new List<string> 
+                { 
+                    "Trollhättan", 
+                    "Lidköping", 
+                    "Mariestad" 
+                };
 
-            return View(DistanceMatrix.DeserializeRoutesTest());
+            return View(DistanceMatrix.GetRoutes(origin, destinations));
         }
 
         public ActionResult About()
