@@ -60,5 +60,36 @@ namespace WebMatrixTest.Models
   } ]
 }
      * */
-    
+    public class DistanceMatrixData
+    {
+        public string status { get; set; }
+        public List<string> origin_addresses { get; set; }
+        public List<string> destination_addresses { get; set; }
+        public List<DistanceMatrixRow> rows { get; set; }
+    }
+
+    public class DistanceMatrixRow
+    {
+        public List<DistanceMatrixElement> elements { get; set; }
+    }
+
+    public class DistanceMatrixElement
+    {
+        public string status { get; set; }
+        public DistanceMatrixDuration duration { get; set; }
+        public DistanceMatrixDistance distance { get; set; }
+    }
+
+    public class DistanceMatrixDuration
+    {
+        public int value { get; set; }
+        public string text { get; set; }
+    }
+
+    public class DistanceMatrixDistance
+    {
+        public int value { get; set; }
+        public string text { get; set; }
+    }
+
 }
