@@ -244,5 +244,23 @@ namespace WebMatrixTest.Models
                                     origin,
                                     destinationString);
         }
+
+        public static List<DistanceMatrixRoute> GetRoutes(string origin,
+                                                List<string> destination)
+        {
+            string callAddress = DistanceMatrix.CreateDistanceMatrixURI(
+                origin,
+                destination);
+
+            List<DistanceMatrixRoute> routes = new List<DistanceMatrixRoute>();
+            using (var client = new WebClient())
+            {
+                client.Encoding = Encoding.UTF8;
+                string json = client.DownloadString(callAddress);
+                routes = DistanceMatrix.DeserializeRoutes(json);
+            }
+
+            return routes;
+        }
     }
 }
